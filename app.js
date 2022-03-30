@@ -1,5 +1,6 @@
 const express = require("express");
 const puppeteer = require("puppeteer");
+const wikipedia = require("wikipedia-js");
 const fs = require("fs");
 const path = require("path");
 
@@ -27,6 +28,17 @@ app.get("/", (req, res) => {
     msg: "ok",
   });
 });
+
+app.get("/teste", async (req, res) => {
+  const options = {query: "naruto", format: "html", sumaryOnly: false, lang: "fr"}
+  wikipedia.searchArticle(options, (err, htmlWikiText) => {
+    if(err){
+      console.log("Erro", options.query, err)
+    }
+    console.log(options.query, htmlWikiText)
+    res.send(htmlWikiText)
+  })
+})
 
 app.get("/:name", async (req, res) => {
   const id = req.params.name;
